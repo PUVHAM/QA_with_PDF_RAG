@@ -6,7 +6,7 @@ QA_with_PDF_RAG is a project that builds a basic Retrieval-Augmented Generation 
 ## Purpose
 The purpose of this repository is to provide a robust framework for extracting information from PDF or text documents and enabling interactive question answering through a conversational interface. This can be particularly useful for educational purposes, allowing users to upload their study materials and ask questions to get answers.
 
-## Installation
+## Installation on Local Machine
 
 1. **Clone the repository**
     ```bash
@@ -25,20 +25,62 @@ The purpose of this repository is to provide a robust framework for extracting i
     pip install -r requirements.txt
     ```
 
-4. **Set up GPU for TensorFlow (Optional)**
+4. **Set up GPU for TensorFlow**
     - Follow the instructions [here](https://www.tensorflow.org/install/pip) to install TensorFlow with GPU support.
 
-## Usage
-
-1. **Run Chainlit to start the application**
+5. **Run Chainlit to start the application**
     ```bash
     chainlit run app.py
     ```
+  
+## Using Google Colab with Free GPU and Ngrok
 
-2. **Interacting with the application**
-    - Upon starting, you will be prompted with a welcome message.
-    - Upload a PDF or text file.
-    - Ask questions about the content of the uploaded file.
+1. **Open file `rag_with_ui.ipynb` in Google Colab and enable the free T4 GPU**
+   - Click on **Runtime** in the top menu, then select **Change runtime type**.
+   - In the dialog that appears, choose **T4 GPU** from the **Hardware accelerator** dropdown.
+   - Click **Save**
+
+2. **Upload necessary files**
+    - Upload `app.py`, `file.py`, `llm.py`, `vector.py`, and `requirements.txt` to the Colab notebook.
+  
+3. **Install dependencies**
+    - In the first code cell, run:
+      ```bash
+      !pip install -q -r requirements.txt
+      !pip install -q pypdf
+      ```
+4. **Run the application**
+    - In the next code cell, run:
+      ```python
+      !python app.py
+      ```
+5. **Using Ngrok to Expose Local Server to the Internet**
+    - Add a new code cell and follow these steps:
+      ```python
+      !pip install pyngrok -q
+      from pyngrok import ngrok
+      ```
+6. **Authenticate Ngrok**
+    - Go to [ngrok.com](https://ngrok.com/), create an account, and log in.
+    - Go to Your Authtoken, copy your authtoken.
+    - Back in Colab, add a new code cell and run:
+      ```python
+      !ngrok config add-authtoken "your-authtoken"
+      public_url = ngrok.connect(8000).public_url
+      print(public_url)
+      ```
+7. **Run the Chainlit app**
+    - After running the previous cells, add a new code cell and run:
+      ```python
+      !chainlit run app.py
+      ```
+    - Once it displays `http://localhost:8000`, click on the `public_url` printed above.
+
+## Usage
+
+* Upon starting, you will be prompted with a welcome message.
+* Upload a PDF or text file.
+* Ask questions about the content of the uploaded file.
 
 ## Files in the Repository
 * `app.py`: Main application script
